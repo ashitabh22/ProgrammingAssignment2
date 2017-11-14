@@ -1,0 +1,37 @@
+library(MASS)
+#Making Cache File 
+makeCachematrix<-function(x=matrix())
+{
+  i<-NULL;
+  set<-function(y)
+  {
+    x<<-y
+    i<<-NULL
+  }
+  get<-function() x
+  setinverse<-function(inverse)
+  {
+    i<<-inverse
+  }
+  getinverse<-function() i
+  
+  list(set = set , get = get,setinverse=setinverse,getinverse=getinverse)
+}
+
+cacheSolve<-function(x){
+  m<-x$getinverse()
+  if(!is.null(m)){
+    message("getting cached data ")
+    return(m)
+  }
+  data<-x$get()
+  m<-ginv(data)
+  x$setinverse(m)
+  m
+}
+
+#To run code you can use the following 
+#mymatrix<-matrix(1:25,5,5)
+#myinverse<-makeCachematrix(mymatrix)
+#myinverse$set(mymatrix) 
+#and so on...
